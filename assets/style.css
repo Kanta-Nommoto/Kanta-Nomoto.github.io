@@ -1,12 +1,227 @@
-/* シンプルなスタイル */
-:root{--bg:#f7f8fb;--accent:#034f84;--muted:#555}
-body{font-family: 'Noto Sans JP', sans-serif;margin:0;background:var(--bg);color:#222}
-.site-header{background:var(--accent);color:#fff;padding:2rem 1rem;text-align:center}
-.site-header h1{margin:0;font-size:1.8rem}
-.subtitle{opacity:0.9;margin-top:0.4rem}
-.container{max-width:900px;margin:2rem auto;padding:1rem;background:#fff;border-radius:6px;box-shadow:0 6px 18px rgba(10,10,10,0.06)}
-h2{color:var(--accent);margin-top:1rem}
-ul{line-height:1.8}
-.site-footer{text-align:center;padding:1rem;color:var(--muted);font-size:0.9rem}
+/* 宇宙テーマのスタイル */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
-@media (max-width:600px){.container{margin:1rem;padding:0.8rem}}
+:root {
+  --dark-bg: #0a0e27;
+  --darker-bg: #050812;
+  --accent-cyan: #00d9ff;
+  --accent-purple: #9d00ff;
+  --accent-blue: #0099ff;
+  --text-light: #e0e6ff;
+  --text-muted: #a0aec0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, var(--darker-bg) 0%, #1a1f3a 50%, var(--darker-bg) 100%);
+  color: var(--text-light);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 星の背景アニメーション */
+.stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stars::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 100px 100px #fff, 200px 50px #fff, 300px 150px rgba(255,255,255,0.5),
+              400px 80px #fff, 500px 200px rgba(255,255,255,0.6), 600px 120px #fff,
+              150px 300px rgba(255,255,255,0.7), 250px 400px #fff, 350px 350px rgba(255,255,255,0.5),
+              450px 450px #fff, 550px 300px rgba(255,255,255,0.6), 650px 400px #fff,
+              50px 500px rgba(255,255,255,0.7), 200px 600px #fff, 400px 600px rgba(255,255,255,0.5);
+  box-shadow: 100px 100px #fff, 200px 50px #fff, 300px 150px rgba(255,255,255,0.5),
+              400px 80px #fff, 500px 200px rgba(255,255,255,0.6), 600px 120px #fff,
+              150px 300px rgba(255,255,255,0.7), 250px 400px #fff, 350px 350px rgba(255,255,255,0.5),
+              450px 450px #fff, 550px 300px rgba(255,255,255,0.6), 650px 400px #fff,
+              50px 500px rgba(255,255,255,0.7), 200px 600px #fff, 400px 600px rgba(255,255,255,0.5),
+              700px 100px #fff, 800px 300px rgba(255,255,255,0.7), 900px 200px #fff,
+              750px 450px rgba(255,255,255,0.6), 850px 500px #fff, 950px 400px rgba(255,255,255,0.5);
+  animation: twinkle 5s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ヘッダー */
+.site-header {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(135deg, rgba(0, 153, 255, 0.1) 0%, rgba(157, 0, 255, 0.1) 100%);
+  border-bottom: 2px solid var(--accent-cyan);
+  padding: 4rem 1rem 3rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.header-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.1); }
+}
+
+.site-header h1 {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-size: 3rem;
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+  letter-spacing: 3px;
+}
+
+.subtitle {
+  position: relative;
+  z-index: 2;
+  margin: 0.5rem 0 0;
+  font-size: 1.1rem;
+  color: var(--accent-cyan);
+  opacity: 0.95;
+  letter-spacing: 1px;
+}
+
+.research-essence {
+  position: relative;
+  z-index: 2;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  font-style: italic;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.9;
+}
+
+/* コンテナ */
+.container {
+  position: relative;
+  z-index: 10;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(15, 30, 70, 0.5) 0%, rgba(30, 15, 60, 0.5) 100%);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.1), inset 0 0 30px rgba(0, 217, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+section {
+  margin-bottom: 2.5rem;
+}
+
+section:last-child {
+  margin-bottom: 0;
+}
+
+h2 {
+  font-family: 'Orbitron', monospace;
+  color: var(--accent-cyan);
+  font-size: 1.6rem;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-purple);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
+}
+
+p {
+  line-height: 1.8;
+  font-size: 1rem;
+  color: var(--text-light);
+  margin: 0.8rem 0;
+}
+
+ul {
+  line-height: 2;
+  color: var(--text-light);
+  padding-left: 1.5rem;
+}
+
+ul li {
+  margin-bottom: 0.4rem;
+  color: var(--text-muted);
+}
+
+ul li::marker {
+  color: var(--accent-cyan);
+  font-weight: bold;
+}
+
+a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-purple);
+  text-shadow: 0 0 10px rgba(157, 0, 255, 0.5);
+}
+
+/* フッター */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(0, 217, 255, 0.2);
+  margin-top: 2rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .site-header h1 {
+    font-size: 2rem;
+  }
+  
+  .container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  p {
+    font-size: 0.95rem;
+  }
+}
