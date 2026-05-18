@@ -1,1 +1,1 @@
-# Kanta-Nommoto.github.io
+# Kanta-Nomoto.github.io
