@@ -145,67 +145,21 @@ body::after {
 .hero {
     margin-top: 0;
     padding: 180px 20px 140px 20px;
-    /* 星雲（ネビュラ）をイメージしたグラデーションバックグラウンド */
-    background: radial-gradient(circle at 70% 30%, rgba(109, 40, 217, 0.25), transparent 50%),
-                radial-gradient(circle at 20% 70%, rgba(30, 58, 138, 0.3), transparent 60%),
-                var(--primary-darker);
+    
+    /* 🌟 変更部分：さっきアップロードした自分の画像を読み込む */
+    background: linear-gradient(rgba(3, 7, 18, 0.2), rgba(1, 4, 9, 0.5)), 
+                url('assets/3D94AA37-6E8C-4D72-9820-746359908CA0_1_105_c.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
     position: relative;
     overflow: hidden;
     min-height: 75vh;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-title {
-    font-size: 4.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan), #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 3px;
-    filter: drop-shadow(0 2px 20px rgba(56, 189, 248, 0.4));
-}
-
-.hero-subtitle {
-    font-size: 1.6rem;
-    color: var(--accent-cyan);
-    margin-bottom: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 4px;
-    text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-}
-
-.hero-description {
-    font-size: 1.2rem;
-    color: var(--text-light);
-    font-weight: 300;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.5rem 2rem;
-    border-radius: 50px;
-    display: inline-block;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* ========== Sections ========== */
