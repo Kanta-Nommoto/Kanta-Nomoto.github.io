@@ -148,7 +148,7 @@ body::after {
     
     /* 🌟 変更部分：さっきアップロードした自分の画像を読み込む */
     background: linear-gradient(rgba(3, 7, 18, 0.2), rgba(1, 4, 9, 0.5)), 
-                url('assets/3D94AA37-6E8C-4D72-9820-746359908CA0_1_105_c.jpeg');
+                url('./3D94AA37-6E8C-4D72-9820-746359908CA0_1_105_c.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
