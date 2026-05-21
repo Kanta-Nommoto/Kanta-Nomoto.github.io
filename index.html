@@ -147,5 +147,100 @@
     </footer>
 
     <script src="js/script.js"></script>
+<script>
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const mouse = { x: null, y: null, targetX: null, targetY: null, vx: 0, vy: 0 };
+        
+        // マウスの動きを感知
+        window.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.targetX = e.clientX - rect.left;
+            mouse.targetY = e.clientY - rect.top;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.targetX = null;
+            mouse.targetY = null;
+        });
+
+        // 波打つ格子の設定
+        const gridGap = 40; // 格子の細かさ（小さいほど細かくなる）
+        let time = 0;
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            time += 0.02;
+
+            // マウスの滑らかな移動（慣性）
+            if (mouse.targetX !== null) {
+                mouse.vx += (mouse.targetX - mouse.x) * 0.1;
+                mouse.vy += (mouse.targetY - mouse.y) * 0.1;
+            }
+            mouse.vx *= 0.85;
+            mouse.vy *= 0.85;
+            mouse.x += mouse.vx;
+            mouse.y += mouse.vy;
+
+            // 格子（網の目）を描画
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.15)'; // 格子の色（サイアンブルーの薄い光）
+            ctx.lineWidth = 1;
+
+            // 横線を描く
+            for (let y = 0; y < height; y += gridGap) {
+                ctx.beginPath();
+                for (let x = 0; x < width; x += 10) {
+                    let dy = 0;
+                    // マウスとの距離を計算して、近くを波打たせる
+                    if (mouse.x !== null) {
+                        const dist = Math.hypot(x - mouse.x, y - mouse.y);
+                        if (dist < 250) {
+                            // 参考サイトのような弾む波（数式で制御）
+                            dy = Math.sin(dist * 0.05 - time * 5) * (250 - dist) * 0.15;
+                        }
+                    }
+                    // 背景のゆったりした自然な宇宙の揺らぎもプラス
+                    dy += Math.sin(x * 0.01 + time) * 5;
+
+                    if (x === 0) ctx.moveTo(x, y + dy);
+                    else ctx.lineTo(x, y + dy);
+                }
+                ctx.stroke();
+            }
+
+            // 縦線を描く
+            for (let x = 0; x < width; x += gridGap) {
+                ctx.beginPath();
+                for (let y = 0; y < height; y += 10) {
+                    let dx = 0;
+                    if (mouse.x !== null) {
+                        const dist = Math.hypot(x - mouse.x, y - mouse.y);
+                        if (dist < 250) {
+                            dx = Math.sin(dist * 0.05 - time * 5) * (250 - dist) * 0.15;
+                        }
+                    }
+                    dx += Math.cos(y * 0.01 + time) * 5;
+
+                    if (y === 0) ctx.moveTo(x + dx, y);
+                    else ctx.lineTo(x + dx, y);
+                }
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
 </body>
 </html>
