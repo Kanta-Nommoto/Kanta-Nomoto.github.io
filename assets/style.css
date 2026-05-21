@@ -144,19 +144,21 @@ body::after {
 /* ========== Hero Section ========== */
 .hero {
     margin-top: 0;
-    padding: 180px 20px 140px 20px;
+    /* 上下の余白（パディング）を少し広げて、画像が大きく表示されるスペースを作ります */
+    padding: 220px 20px 180px 20px;
     
-    /* 🌟 変更部分：さっきアップロードした自分の画像を読み込む */
     background: linear-gradient(rgba(3, 7, 18, 0.2), rgba(1, 4, 9, 0.5)), 
-                url('./3D94AA37-6E8C-4D72-9820-746359908CA0_1_105_c.jpeg');
-    background-size: cover;
-    background-position: center;
+                url('./2025-11-07 10.56の画像.jpg');
+                
+    /* 🌟 ここを変更：cover から contain に変えて、全体を縮小配置します */
+    background-size: contain;        
+    background-position: center top; /* 画像の上のライン（地球の丸み）を基準に合わせる */
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: scroll;   /* 見切れを防ぐため、一旦固定を解除して通常スクロールにします */
     
     position: relative;
     overflow: hidden;
-    min-height: 75vh;
+    min-height: 85vh;                /* エリア全体の高さを少し高く（75→85）します */
     display: flex;
     align-items: center;
     justify-content: center;
