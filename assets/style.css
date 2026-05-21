@@ -144,26 +144,27 @@ body::after {
 /* ========== Hero Section ========== */
 .hero {
     margin-top: 0;
-    /* 上下の余白（パディング）を少し広げて、画像が大きく表示されるスペースを作ります */
-    padding: 220px 20px 180px 20px;
+    padding: 180px 20px 140px 20px;
     
+    /* ⭕ 変更ポイント： url('./ファイル名') に書き換えます */
     background: linear-gradient(rgba(3, 7, 18, 0.2), rgba(1, 4, 9, 0.5)), 
-                url('./3D94AA37-6E8C-4D72-9820-746359908CA0_1_105_c.jpeg);
-                
-    /* 🌟 ここを変更：cover から contain に変えて、全体を縮小配置します */
-    background-size: contain;        
-    background-position: center top; /* 画像の上のライン（地球の丸み）を基準に合わせる */
+                url('./2025-11-07 10.56の画像.jpg');
+    
+    /* ※もしファイル名を「earth-satellite.jpeg」等に変えてアップロードした場合は、
+       url('./earth-satellite.jpeg') にしてください。拡張子（.jpgか.jpegか）も合わせてくださいね */
+
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-attachment: scroll;   /* 見切れを防ぐため、一旦固定を解除して通常スクロールにします */
+    background-attachment: fixed;
     
     position: relative;
     overflow: hidden;
-    min-height: 85vh;                /* エリア全体の高さを少し高く（75→85）します */
+    min-height: 75vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 /* ========== Sections ========== */
 .section {
     padding: 100px 20px;
