@@ -172,9 +172,9 @@
                         x: mouseX,
                         y: mouseY,
                         radius: 0,          // スタート時は半径0
-                        maxRadius: 300,     // どこまで広がるか
-                        speed: 4,           // 波が広がるスピード
-                        opacity: 0.6        // 初期設定の濃さ
+                        maxRadius: 1200,     // どこまで広がるか
+                        speed: 5,           // 波が広がるスピード
+                        opacity: 0.8        // 初期設定の濃さ
                     });
                     lastMouseX = mouseX;
                     lastMouseY = mouseY;
@@ -201,7 +201,7 @@
             for (let i = ripples.length - 1; i >= 0; i--) {
                 const r = ripples[i];
                 r.radius += r.speed; // 半径を大きくしていく
-                r.opacity -= 0.01;   // 徐々に消えていく
+                r.opacity -= 0.003;   // 徐々に消えていく
 
                 // 画面外（maxRadius）まで広がりきった、または完全に透明になったら配列から消す
                 if (r.radius > r.maxRadius || r.opacity <= 0) {
@@ -226,7 +226,7 @@
                         const waveFront = Math.abs(dist - r.radius);
                         if (waveFront < 40) {
                             // 先端部分をサイン波で上下に揺らす（広がっていく波の表現）
-                            dy += Math.sin((dist - r.radius) * 0.1) * 20 * r.opacity;
+                            dy += Math.sin((dist - r.radius) * 0.1) * 40 * r.opacity;
                         }
                     });
 
@@ -249,7 +249,7 @@
                         const dist = Math.hypot(x - r.x, y - r.y);
                         const waveFront = Math.abs(dist - r.radius);
                         if (waveFront < 40) {
-                            dx += Math.sin((dist - r.radius) * 0.1) * 20 * r.opacity;
+                            dx += Math.sin((dist - r.radius) * 0.1) * 40 * r.opacity;
                         }
                     });
 
