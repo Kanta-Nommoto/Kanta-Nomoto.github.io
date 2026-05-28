@@ -8,15 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <svg xmlns="http://www.w3.org/2000/svg" style="position: absolute; width: 0; height: 0;">
-        <defs>
-            <filter id="liquid-wave" x="0%" y="0%" width="100%" height="100%">
-                <feImage href="" result="ripple-img" id="fe-ripple-link" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" />
-                <feDisplacementMap in="SourceGraphic" in2="ripple-img" scale="80" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-        </defs>
-    </svg>
-
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
@@ -148,100 +139,36 @@
 
     <script src="js/script.js"></script>
     <script>
-        const canvas = document.getElementById('rippleCanvas');
-const ctx = canvas.getContext('2d');
-const feRippleLink = document.getElementById('fe-ripple-link');
+        const hero = document.querySelector('.hero');
+const overlay = document.querySelector('.ripple-overlay');
 
-// 画面サイズに合わせて波紋計算用のキャンバスサイズを設定
-let width = canvas.width = window.innerWidth / 2;  // 負荷軽減のため1/2サイズで計算
-let height = canvas.height = window.innerHeight / 2;
+let currentX = 0;
+let currentY = 0;
+let targetX = 0;
+let targetY = 0;
 
-window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth / 2;
-    height = canvas.height = window.innerHeight / 2;
+hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    // マウスの現在地を計測
+    targetX = e.clientX - rect.left;
+    targetY = e.clientY - rect.top;
 });
 
-const ripples = [];
-let lastMouseX = null;
-let lastMouseY = null;
+// 波紋がパキパキ動くのを防ぎ、ヌルヌルと滑らかに追従させるためのアニメーション関数
+function毎回ループ() {
+    // 目標地点に向かって、じわーっと座標を近づける（イージング処理）
+    currentX += (targetX - currentX) * 0.1;
+    currentY += (targetY - currentY) * 0.1;
 
-// マウスが動いたら波紋の「元」を追加
-window.addEventListener('mousemove', (e) => {
-    // 実際の画面サイズからCanvas内の座標に変換
-    const mouseX = (e.clientX / window.innerWidth) * width;
-    const mouseY = (e.clientY / window.innerHeight) * height;
+    // CSSカスタムプロパティ（変数）へ座標をリアルタイム転送
+    overlay.style.setProperty('--x', `${currentX}px`);
+    overlay.style.setProperty('--y', `${currentY}px`);
 
-    if (lastMouseX !== null && lastMouseY !== null) {
-        const distMoved = Math.hypot(mouseX - lastMouseX, mouseY - lastMouseY);
-        // 一定以上動いたら新しい波紋を発生させる
-        if (distMoved > 8) { 
-            ripples.push({
-                x: mouseX,
-                y: mouseY,
-                radius: 0,          // 初期サイズ
-                maxRadius: 150,     // 🌟 波がどこまで広がるか（お好みで調整可能）
-                speed: 2.5,         // 🌟 波が広がるスピード
-                opacity: 1.0        // 初期濃度
-            });
-            lastMouseX = mouseX;
-            lastMouseY = mouseY;
-        }
-    } else {
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-    }
-});
-
-window.addEventListener('mouseleave', () => {
-    lastMouseX = null;
-    lastMouseY = null;
-});
-
-function animateRipples() {
-    // 中立（歪みゼロ）の状態を表す灰色（#808000）でキャンバスを塗りつぶす
-    ctx.fillStyle = 'rgb(128, 128, 0)';
-    ctx.fillRect(0, 0, width, height);
-
-    // 発生しているすべての波紋を1つずつ外側に広げる計算
-    for (let i = ripples.length - 1; i >= 0; i--) {
-        const r = ripples[i];
-        r.radius += r.speed;     // 円を大きくする
-        r.opacity -= 0.008;      // じわじわ薄くする
-
-        // 寿命を迎えた波紋は配列から削除
-        if (r.opacity <= 0 || r.radius > r.maxRadius) {
-            ripples.splice(i, 1);
-            continue;
-        }
-
-        // グラデーションを使って「外側に向かって押し出す波」をCanvasに描画
-        const grad = ctx.createRadialGradient(r.x, r.y, Math.max(0, r.radius - 20), r.x, r.y, r.radius + 20);
-        
-        // 特殊な色（赤と緑の強弱）を使ってSVGフィルターに歪みの方向を伝える
-        const rValue = Math.floor(128 + 127 * r.opacity);
-        const gValue = Math.floor(128 - 127 * r.opacity);
-
-        grad.addColorStop(0, 'rgb(128, 128, 0)');
-        grad.addColorStop(0.3, `rgb(${rValue}, ${gValue}, 0)`);
-        grad.addColorStop(0.5, 'rgb(128, 128, 0)');
-        grad.addColorStop(0.7, `rgb(${gValue}, ${rValue}, 0)`);
-        grad.addColorStop(1, 'rgb(128, 128, 0)');
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.radius + 20, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    // 描いた波紋の画像データを、SVGのフィルターにリアルタイムで転送
-    const dataURL = canvas.toDataURL();
-    feRippleLink.setAttribute('href', dataURL);
-
-    requestAnimationFrame(animateRipples);
+    requestAnimationFrame(毎回ループ);
 }
 
 // アニメーションを開始
-animateRipples();
+毎回ループ();
     </script>
 </body>
 </html>
