@@ -42,19 +42,7 @@ body::before, body::after {
     pointer-events: none;
 }
 
-/* サイト全体の後ろで星を光らせるための背景設定 */
-body::before, body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-}
-
-/* 🌟 変更点：星のサイズをほんの少し大きくし、鮮やかな色の星を追加して明るさをアップ */
+/* 🌟 星のサイズをほんの少し大きくし、鮮やかな色の星を追加して明るさをアップ */
 body::before {
     background-image: 
         radial-gradient(2px 2px at 40px 60px, #ffffff, rgba(0,0,0,0)),
@@ -76,7 +64,7 @@ body::after {
     animation: globalTwinkle 7s infinite ease-in-out 1s;
 }
 
-/* 🌟 変更点：一番暗いときでも「0.4」の明るさをキープし、最大「1.0（100%）」まで光らせる */
+/* 🌟 一番暗いときでも「0.4」の明るさをキープし、最大「1.0（100%）」まで光らせる */
 @keyframes globalTwinkle {
     0%, 100% { opacity: 0.6; } /* 最暗時：0.2 から 0.4 に引き上げ */
     50% { opacity: 1.0; }       /* 最亮時：0.8 から 1.0 に引き上げ */
@@ -109,18 +97,12 @@ body::after {
     padding: 1.2rem 20px;
 }
 
-/* ⭕ 修正後 */
 .nav-brand h1 {
     font-size: 1.6rem;
-    
-    /* 青のグラデーションをなくし、完全な白（#ffffff）に統一します */
     color: #ffffff;
     -webkit-text-fill-color: initial; /* グラデーション用の設定をリセット */
-    
     font-weight: 700;
     letter-spacing: 1px;
-    
-    /* ほんの少しだけ文字の後ろを光らせて、視認性を高めるSF風エフェクトを追加 */
     text-shadow: 0 0 10px rgba(56, 189, 248, 0.2); 
 }
 
@@ -181,7 +163,7 @@ body::after {
     justify-content: center;
 }
 
-/* 🌟 追加：波打ちキャンバスを背景と文字の間に潜り込ませる設定 */
+/* 🌟 波打ちキャンバスの設定 */
 #waveCanvas {
     position: absolute;
     top: 0;
@@ -189,17 +171,21 @@ body::after {
     width: 100%;
     height: 100%;
     z-index: 1;              /* 背景画像の上、文字（z-index: 10）の下に配置 */
-    pointer-events: none;    /* ⭕ これにより、キャンバス越しでも後ろの文字やボタンを正常にクリックできるようになります */
+    /* ⭕ pointer-events: noneを外し、JavaScriptでマウスイベントを100%拾えるようにします */
 }
+
 /* ========== Hero Content (文字全体のエリア) ========== */
 .hero-content {
     position: relative;
     z-index: 10;
-    text-align: center;         /* ⭕ 文字をすべて中央揃えにする */
+    text-align: center;         /* 文字をすべて中央揃えにする */
     max-width: 900px;           /* 大きな文字が窮屈に折り返されないように広げます */
     margin: 0 auto;
     padding: 0 20px;
     animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* 🌟 付け足し：キャンバスの上にあっても、文字の選択やクリックを可能にする設定 */
+    pointer-events: auto; 
 }
 
 @keyframes fadeInUp {
@@ -218,11 +204,8 @@ body::after {
     font-size: 5.5rem;
     font-weight: 700;
     margin-bottom: 0.8rem;
-    
-    /* ⭕ 変更点：グラデーションをなくし、文字色を「完全な白（#ffffff）」に変更 */
     color: #ffffff;
     -webkit-text-fill-color: initial; /* グラデーション用の設定をリセット */
-    
     letter-spacing: 4px;
     filter: drop-shadow(0 2px 20px rgba(56, 189, 248, 0.4));
 }
@@ -230,15 +213,13 @@ body::after {
 /* 🌟 サブタイトル：Spacetime Metrology Laboratory */
 .hero-subtitle {
     font-size: 2.0rem;
-    
-    /* ⭕ 変更点：サイアンブルーから「透き通るような白（#f8fafc）」に変更 */
     color: #f8fafc;
-    
     margin-bottom: 2.0rem;
     font-weight: 500;
     letter-spacing: 5px;
     text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); /* 文字の周りの青い発光エフェクトは残して視認性をキープ */
 }
+
 /* ========== Sections ========== */
 .section {
     padding: 100px 20px;
@@ -342,38 +323,37 @@ body::after {
     border: 1px solid rgba(109, 40, 217, 0.4);
     border-radius: 16px;
     padding: 3.5rem;
-    max-width: 800px; /* 横並びにするため、全体の横幅を少し広げました */
+    max-width: 800px; 
     margin: 0 auto;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 20px 50px rgba(109, 40, 217, 0.15);
     
-    /* 🌟 変更点：要素を横並び（Flexbox）にし、隙間を作ります */
     display: flex;
     align-items: center;
     gap: 3rem;
 }
 
-/* 🌟 追加：写真をきれいな円形（丸型）にする設定 */
+/* 写真をきれいな円形（丸型）にする設定 */
 .professor-image {
-    flex-shrink: 0; /* 画面が狭くなっても画像が潰れないように固定 */
+    flex-shrink: 0; 
     width: 160px;
     height: 160px;
-    border-radius: 50%; /* ⭕ 完全に丸く型抜く設定 */
+    border-radius: 50%; 
     overflow: hidden;
-    border: 3px solid var(--accent-cyan); /* 丸い枠線にサイアンブルーの発光をいれます */
+    border: 3px solid var(--accent-cyan); 
     box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
 }
 
 .professor-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 縦横比が崩れず、中央で綺麗に収まるようにします */
+    object-fit: cover; 
 }
 
-/* 🌟 テキストエリアの調整 */
+/* テキストエリアの調整 */
 .professor-info {
-    flex: 1; /* 残りの横幅をいっぱいに使う */
+    flex: 1; 
 }
 
 .professor-info h3 {
@@ -404,7 +384,7 @@ body::after {
     line-height: 1.8;
 }
 
-/* 📱 追加：スマホなどの狭い画面では、画像と文字を縦並びに戻すレスポンシブ設定 */
+/* 📱 スマホなどの狭い画面では、画像と文字を縦並びに戻すレスポンシブ設定 */
 @media (max-width: 768px) {
     .professor-card {
         flex-direction: column;
@@ -413,6 +393,7 @@ body::after {
         gap: 2rem;
     }
 }
+
 /* ========== News Section ========== */
 .news-list {
     background: var(--card-bg);
