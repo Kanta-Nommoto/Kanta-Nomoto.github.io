@@ -29,6 +29,8 @@
       <section id="home" class="hero">
             <img src="assets/3D94AA37-6E8C-4D72-9820-746359908CA0_1_105_c.jpeg" alt="宇宙背景" class="hero-bg-img">
             
+            <canvas id="waterRippleCanvas"></canvas>
+            
             <div class="hero-overlay-dark"></div>
 
             <div class="hero-content">
@@ -141,47 +143,95 @@
 
     <script src="js/script.js"></script>
     <script>
-       const bgImg = document.querySelector('.hero-bg-img');
+       const canvas = document.getElementById('waterRippleCanvas');
+const ctx = canvas.getContext('2d');
 const hero = document.querySelector('.hero');
 
-let currentScale = 0;
-let targetScale = 0;
-let timer = 0;
+// 画面サイズに合わせてCanvasをフィットさせる
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-// マウスが動いたら、画像が外側にウネッと広がるエネルギーをチャージ（最大50pxの歪み）
+window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+});
+
+const ripples = [];
+let lastMouseX = null;
+let lastMouseY = null;
+
+// マウスが動いた位置に波紋の「種」を植える
 hero.addEventListener('mousemove', (e) => {
-    targetScale = 50; 
-});
+    const rect = hero.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
 
-// マウスが離れたら波をなだらかに沈める
-hero.addEventListener('mouseleave', () => {
-    targetScale = 0;
-});
-
-function animateWave() {
-    timer += 0.05; // 波が外へ広がるスピード
-
-    // 現在の波の強さを目標値に滑らかに近づける（イージング）
-    currentScale += (targetScale - currentScale) * 0.1;
-
-    // マウスが止まっても、外側に広がった波が消えるようにエネルギーをじわじわ減衰させる
-    if (targetScale > 0.1) {
-        targetScale *= 0.94; 
+    if (lastMouseX !== null && lastMouseY !== null) {
+        const distMoved = Math.hypot(mouseX - lastMouseX, mouseY - lastMouseY);
+        // マウスがある程度動いたら新しい波紋を発生させる（連続して美しい波を作るため）
+        if (distMoved > 15) { 
+            ripples.push({
+                x: mouseX,
+                y: mouseY,
+                radius: 0,          // スタート時は点
+                maxRadius: 250,     // 🌟 波が外側に広がる最大サイズ（お好みで調整してね）
+                speed: 3.5,         // 🌟 波が外に進むスピード
+                opacity: 0.5        // 波紋の強さ
+            });
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+        }
     } else {
-        targetScale = 0;
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+    }
+});
+
+// マウスが外に出たらリセット
+hero.addEventListener('mouseleave', () => {
+    lastMouseX = null;
+    lastMouseY = null;
+});
+
+function animate() {
+    // 画面をクリア（mix-blend-mode: overlay のために中立なグレーで塗るのがコツです）
+    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
+    ctx.fillRect(0, 0, width, height);
+
+    // すべての波紋を外側へ広げるループ処理
+    for (let i = ripples.length - 1; i >= 0; i--) {
+        const r = ripples[i];
+        
+        r.radius += r.speed;     // 円を外側に広げる
+        r.opacity -= 0.006;      // 外に行くほどじわじわ消す
+
+        // 寿命を迎えた波紋は削除
+        if (r.opacity <= 0 || r.radius > r.maxRadius) {
+            ripples.splice(i, 1);
+            continue;
+        }
+
+        // 🌟 コトブキ工芸風：グラデーションを使って「光の凸」と「影の凹」の輪っかを作る
+        const grad = ctx.createRadialGradient(r.x, r.y, Math.max(0, r.radius - 30), r.x, r.y, r.radius + 30);
+        
+        // overlayブレンドしたときに、白(#fff)は光り、黒(#000)は影になります
+        grad.addColorStop(0, 'rgba(128, 128, 128, 0)');
+        grad.addColorStop(0.3, `rgba(255, 255, 255, ${r.opacity})`); // 波のハイライト（光）
+        grad.addColorStop(0.5, 'rgba(128, 128, 128, 0)');
+        grad.addColorStop(0.7, `rgba(0, 0, 0, ${r.opacity * 0.8})`);  /* 波のシャドウ（影） */
+        grad.addColorStop(1, 'rgba(128, 128, 128, 0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius + 30, 0, Math.PI * 2);
+        ctx.fill();
     }
 
-    // 🌟 核心：時間経過で波紋が外側にツツツ…と広がっていくリアルなゆらぎを計算
-    const waveIntensity = currentScale * (1 + Math.sin(timer * 2) * 0.3);
-
-    // CSS変数を通じて、画像内のフィルターに数値をリアルタイム転送
-    bgImg.style.setProperty('--wave', waveIntensity);
-
-    requestAnimationFrame(animateWave);
+    requestAnimationFrame(animate);
 }
 
-// アニメーションを開始
-animateWave();
+// ループ処理スタート
+animate();
     </script>
 </body>
 </html>
