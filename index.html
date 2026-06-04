@@ -170,13 +170,14 @@ hero.addEventListener('mousemove', (e) => {
         const distMoved = Math.hypot(mouseX - lastMouseX, mouseY - lastMouseY);
         // マウスがある程度動いたら新しい波紋を発生させる（連続して美しい波を作るため）
         if (distMoved > 15) { 
+            // 🚀 修正後：ウネリを大きく、もっと遠くまで広げる設定
             ripples.push({
-                x: mouseX,
-                y: mouseY,
-                radius: 0,          // スタート時は点
-                maxRadius: 250,     // 🌟 波が外側に広がる最大サイズ（お好みで調整してね）
-                speed: 3.5,         // 🌟 波が外に進むスピード
-                opacity: 0.5        // 波紋の強さ
+            x: mouseX,
+            y: mouseY,
+            radius: 0,          
+            maxRadius: 600,     // 🌟 250 → 600 に拡大：画面の端まで波が届くようになります
+            speed: 4.5,         // 🌟 3.5 → 4.5 に加速：ダイナミックにスッと広がります
+            opacity: 0.85       // 🌟 0.5 → 0.85 にアップ：光と影の明暗がハッキリし、波の振幅（ウネリ）が目に見えて大きくなります
             });
             lastMouseX = mouseX;
             lastMouseY = mouseY;
