@@ -148,7 +148,6 @@ body::after {
 .hero {
     margin-top: 0;
     padding: 220px 20px 180px 20px;
-    /* CSS側のbackgroundはSVGに移行したので透明にします */
     background: #030712;   
     position: relative;
     overflow: hidden;
@@ -158,18 +157,23 @@ body::after {
     justify-content: center;
 }
 
-/* 🌟 追加：SVG背景画像を画面いっぱいに引き伸ばす設定 */
-.hero-bg-svg {
+/* 🌟 追加：背景画像を画面いっぱいに綺麗に表示し、波の歪み効果を仕込む設定 */
+.hero-bg-img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover; /* 画面に合わせて綺麗にトリミング */
     z-index: 1;
-    object-fit: cover;
+    pointer-events: none;
+    
+    /* JSから渡される波のパラメータ（--wave）を使って、画像自体をリアルに歪ませます */
+    filter: contrast(1.1) brightness(0.9) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='1' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='var(--wave, 0)' xChannelSelector='R' yChannelSelector='G'/></filter></svg>#w");
+    will-change: filter;
 }
 
-/* 🌟 追加：文字を読みやすくするために重ねる暗がりのレイヤー */
+/* 文字を読みやすくするために重ねる暗がりのレイヤー */
 .hero-overlay-dark {
     position: absolute;
     top: 0;
@@ -178,11 +182,11 @@ body::after {
     height: 100%;
     background: linear-gradient(rgba(3, 7, 18, 0.3), rgba(1, 4, 9, 0.6));
     z-index: 2;
-    pointer-events: none; /* マウスをすり抜けさせる */
+    pointer-events: none;
 }
 
-/* 古いCanvasやオーバーレイの設定が残っていれば非表示にします */
-#waveCanvas, #rippleCanvas, .ripple-overlay {
+/* 古い設定のクリーンアップ */
+.hero-bg-svg, #waveCanvas, #rippleCanvas, .ripple-overlay {
     display: none !important;
 }
 
